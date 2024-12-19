@@ -28,14 +28,15 @@
                         </div>
                     </div>
                     <div class="col-1">
-                        <a class="btn btn-success" href="#"><i class="fa-solid fa-right-to-bracket"></i> Salir</a>
+                        <a class="btn btn-success" href="{% url 'app3:cerrarSesion' %}"><i class="fa-solid fa-right-to-bracket"></i> Salir</a>
                     </div>
                 </div>
             </div>
         </div>
         <div class="container mt-3 mb-3">
             <div>
-                <a href="{% url 'app4:informacionUsuario' %}" class="btn btn-info">Volver <i class="fa-solid fa-arrow-left"></i></a>
+                <!--Boton VOLVER-->
+                <a href="{% url 'app3:informacionUsuario' %}" class="btn btn-info">Volver <i class="fa-solid fa-arrow-left"></i></a>
             </div>
         </div>
         <div class="mt-5 text-center">
@@ -88,7 +89,8 @@
             NO OLVIDAR COLOCAR LA REFERENCIA AL CSRF TOKEN COMO EN LOS OTROS FORMULARIOS PARA TRASLADAR CORRECTAMENTE
             LA INFORMACION
             -->
-            <form method="post" action="#">
+            <form method="post" action="{% url 'app3:consolaAdministrador' %}">
+                {% csrf_token %}
                 <div class="modal-header">
                     <h5 class="modal-title">Crear nuevo usuario</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -158,7 +160,7 @@
 <div class="modal fade" id="editarUsuario" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form method="post" action="{% url 'app4:actualizarUsuario' %}">
+            <form method="post" action="{% url 'app3:actualizarUsuario' %}">
             {% csrf_token %}
                 <div class="modal-header">
                     <h5 class="modal-title">Editar usuario</h5>
