@@ -1,7 +1,7 @@
 
 function cargarPub(idPub)
 {
-    fetch(`/devolverPublicacion?idPub=${idPub}`)
+    fetch(`/devolverPublicacion?idPub=${idPub}`) /*pedicion al servidor*/
     .then(response => response.json())
     .then(data => {
         tituloPub = document.getElementById('tituloPub')
@@ -97,16 +97,38 @@ function getCookie(name)
 }
 
 function cargarInformacionUsuario(idUsuario)
-{
-    /*
-    PREGUNTA 4
-    DESARROLLAR LA FUNCION DE JAVASCRIPT QUE PERMITA CONSULTAR LA RUTA 
+/*PREGUNTA 4
+    DESARROLLAR LA FUNCION DE JAVASCRIPT QUE PERMITA CONSULTAR LA RUTA
     OBTENERDATOSUSUARIO?IDUSUARIO=${IDUSUARIO}
+ */ {
+    fetch(`/obtenerDatosUsuario?idUsusario=${idUsuario}`)
+        .then(response => response.json())
+        .then(data => {
+            usernameUsuario = document.getElementById('usernameUsario')
+            contraUsuario = document.getElementById('contraUsuario')
+            nombreUsuario = document.getElementById('nombreUsuario')
+            apellidoUsuario = document.getElementById('apellidoUsuario')
+            emailUsuario = document.getElementById('emailUsuario')
+            profesionUsuario = document.getElementById('profesionUsuario')
+            nroCelular = document.getElementById('nroCelular')
+            perfilUsuario = document.getElementById('perfilUsuario')
+            /*
+            REVISAR LA IMPLEMENTACION REALIZADA PARA EDITAR MOSTRAR PUBLICACIONES
+        
+            TENER EN CUENTA EL INPUT QUE ESTA OCULTO Y CARGAR AHI EL ID DEL USUARIO
+            PARA PODER ENVIARLO AL SERVIDOR COMO PARTE DE LOS DATOS Y ASI PODER
+            RECUPERAR EL OBJETO USUARIO Y ACTUALIZAR LOS DATOS
+            */
+            usernameUsuario = data.username
+            contraUsuario = data.password
+            nombreUsuario = data.first_name
+            apellidoUsuario = data.last_name
+            emailUsuario = data.email
+            profesionUsuario = data.profesion
+            nroCelular = data.nroCelular
+            perfilUsuario = data.perfilUsuario
 
-    REVISAR LA IMPLEMENTACION REALIZADA PARA EDITAR MOSTRAR PUBLICACIONES
+            idUsuario.innerHTML = String(idUsuario)
 
-    TENER EN CUENTA EL INPUT QUE ESTA OCULTO Y CARGAR AHI EL ID DEL USUARIO
-    PARA PODER ENVIARLO AL SERVIDOR COMO PARTE DE LOS DATOS Y ASI PODER
-    RECUPERAR EL OBJETO USUARIO Y ACTUALIZAR LOS DATOS
-    */
+        })
 }

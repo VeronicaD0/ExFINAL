@@ -166,10 +166,49 @@
                     <h5 class="modal-title">Editar usuario</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <!--REVISAAAAAAR-->
                 <div style="display: none;">
-                    <input id="idUsuario" name="idUsuario" value="">
+                    <input id="idUsuario" name="idUsuario" value="{{ userInfo.id }}">
                 </div>
+                <!----------------------------------------->
                 <div class="modal-body">
+                    <div class="row form-group justify-content-around mb-3">
+                        <div class="col-5">
+                            <label>Username :</label>
+                            <input type="text" readonly class="form-control-plaintext" id="{{ userInfo.id }}" value="{{ user.username }}">
+                        </div>
+                        <div class="col-5">
+                            <label>Email :</label>
+                            <input type="text" readonly class="form-control-plaintext" id="{{ userInfo.id }}" value="{{ user.email }}">
+                        </div>
+                    </div>
+                    <div class="row form-group justify-content-around mb-3">
+                        <div class="col-5">
+                            <label>Nombre :</label>
+                            <input class="form-control" type="text" name="nombreUsuario">
+                        </div>
+                        <div class="col-5">
+                            <label>Apellido :</label>
+                            <input class="form-control" type="text" name="apellidoUsuario">
+                        </div>
+                    </div>
+                    <div class="row form-group justify-content-around mb-3">
+                        <div class="col-5">
+                            <label>Profesion :</label>
+                            <input class="form-control" type="text" name="profesionUsuario">
+                        </div>
+                        <div class="col-5">
+                            <label>Nro de celular :</label>
+                            <input class="form-control" type="text" name="nroCelular">
+                        </div>
+                    </div> 
+                    <div class="row form-group justify-content-around mb-3">
+                        <div class="col-11">
+                            <label>Perfil del usuario :</label>
+                            <textarea class="form-control" type="text" name="perfilUsuario" rows="4"></textarea>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

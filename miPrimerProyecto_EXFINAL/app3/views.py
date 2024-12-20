@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required #solicitud de sesion
 from django.contrib.auth import authenticate, login, logout #autenticacion nativa de django
 from django.http import HttpResponseRedirect, JsonResponse, FileResponse
 from django.urls import reverse 
-from .models import publicacion, comentario
+from .models import publicacion, comentario, datosUsuario
 import json
 import base64
 from django.contrib.auth.models import User
@@ -21,8 +21,7 @@ def ingresoUsuario(request):
             return HttpResponseRedirect(reverse('app3:ingresoUsuario'))#si-no retornar aqui
     return render(request,'ingresoUsuario.html')
 
-@login_required(login_url='/')#para ingresar a esta vista si hace falta el login_required(de no estar
-                              #autenticado redirecciona a nuestra ruta vacia)
+@login_required(login_url='/')#para ingresar a esta vista si hace falta el login_required(de no estar autenticado redirecciona a nuestra ruta vacia)
 def informacionUsuario(request):
     return render(request,'informacionUsuario.html',{
         'allPubs':publicacion.objects.all()
@@ -50,19 +49,19 @@ def devolverDatos(request):
         })
 
 def devolverAllPubs(request):
-    objPub = publicacion.objects.all()
-    listaPublicacion = []
-    for obj in objPub:
-        listaPublicacion.append({
+    objPub = publicacion.objects.all() #todas las publicaciones dentro de publicacion
+    listaPublicacion = [] #creamos lista
+    for obj in objPub: #para todoslos obj en objpub
+        listaPublicacion.append({ #anexamos ({diccionario})
                 'titulo':obj.titulo,
                 'descripcion':obj.descripcion
             })
     return JsonResponse({
-        'listaPublicacion':listaPublicacion
+        'listaPublicacion':listaPublicacion #valor/contexto en vista:valor en nuestra funcion
     })
 
 def devolverPublicacion(request):
-    idPub = request.GET.get('idPub')
+    idPub = request.GET.get('idPub') #id de la publicacion- capturamos dentro de la funcion
     try:
         datosComentarios = []
         objPub = publicacion.objects.get(id=idPub)
@@ -173,7 +172,7 @@ def consolaAdministrador(request):
             perfilUsuario=perfilUsuario,
             usrRel=Objusr
             )
-    return HttpResponseRedirect(reverse('app3:consolaAdministrador'))#redireccionar a..
+        return HttpResponseRedirect(reverse('app3:consolaAdministrador'))#redireccionar a..
     return render(request,'consolaAdministrador.html',{
         'allUsers':allUsers
     })
@@ -216,7 +215,33 @@ def obtenerDatosUsuario(request):
     cargar en la ventana modal para poder ser editados
     Con el id del usuario se puede obtener el objeto y devolver
     el objeto Json con la informacion necesaria.
-    """
+    """ 
+    try:
+        datosUser = []  #datosComentarios = []
+        objUsr = User.objects.get(id=idUsuario)
+        datosExten=objUser.datosUsuario.set.all()
+        return JsonResponse({
+            #'llave':valor de la llave
+            'usuario': objUsr.username,
+            'email':objUsr.email,
+            'nombre':objUsr.first_name,
+            'apellido': objUsr.last_name,
+           # 'profesion':f"{objUser.usrRel.profesion}"
+            'profesion':datdatosExten.profesion,
+            'numero':datdatosExten.nroCelular,
+            'perfil':datdatosExten.perfilUsuario
+        })
+    except:
+        return JsonResponse({
+            'usuario':'SIN DATOS',
+            'email':'SIN DATOS',
+            'nombre':'SIN DATOS',
+            'apellido':'SIN DATOS',
+            'profesion':None,
+            'numero':None,
+            'perfil':None
+        })
+
     return JsonResponse({
         'resp':'200'
     })
@@ -231,5 +256,5 @@ def actualizarUsuario(request):
     ejecutar el metodo save() para su respectiva actualizacion
     """
 
-    return HttpResponseRedirect(reverse('app4:consolaAdministrador'))
+    return HttpResponseRedirect(reverse('app3:consolaAdministrador'))
 
