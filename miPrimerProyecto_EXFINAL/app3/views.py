@@ -37,7 +37,7 @@ def ejemploJs(request):
     return render(request,'ejemploJs.html')
 
 def devolverDatos(request):
-    return JsonResponse({
+    return JsonResponse({ #respuesta: objeto json
             'nombreCurso':'DesarroloWebPython',
             'horario':{
                 'martes':'7-10',
@@ -54,6 +54,7 @@ def devolverAllPubs(request):
     for obj in objPub: #para todoslos obj en objpub
         listaPublicacion.append({ #anexamos ({diccionario})
                 'titulo':obj.titulo,
+                'autor' :f"{objPub.autorPub.first_name} {objPub.autorPub.last_name}",
                 'descripcion':obj.descripcion
             })
     return JsonResponse({
@@ -61,10 +62,10 @@ def devolverAllPubs(request):
     })
 
 def devolverPublicacion(request):
-    idPub = request.GET.get('idPub') #id de la publicacion- capturamos dentro de la funcion
+    idPub = request.GET.get('idPub') #id de la publicacion- capturamos parametro (idPub)dentro de la funcion
     try:
         datosComentarios = []
-        objPub = publicacion.objects.get(id=idPub)
+        objPub = publicacion.objects.get(id=idPub) #capturamos objeto con el id=idPub
         comentariosPub = objPub.comentario_set.all()
         for comentarioInfo in comentariosPub:
             datosComentarios.append({
@@ -99,7 +100,8 @@ def publicarComentario(request):
     comentarioTexto = datosComentario.get('comentario')
     idPublicacion = datosComentario.get('idPublicacion')
     objPublicacion = publicacion.objects.get(id=idPublicacion)
-    comentario.objects.create(descripcion = comentarioTexto,
+    comentario.objects.create(
+        descripcion = comentarioTexto,
         pubRel = objPublicacion,
         autoCom = request.user)
     return JsonResponse({
@@ -113,7 +115,8 @@ def crearPublicacion(request):
         autorPub = request.user
         imagenPub = request.FILES.get('imagenPub')
 
-        publicacion.objects.create(titulo=tituloPub,
+        publicacion.objects.create(
+            titulo=tituloPub,
             descripcion=descripcionPub,
             autorPub = autorPub,
             imagenPub = imagenPub)
@@ -127,16 +130,14 @@ def inicioReact(request):
 
 
 # PREGUNTA 1 - B
-# CREAR EL IF QUE PERMITA RECONOCER EL MÉTODO DE LA PETICION: IF REQUEST.METHOD
-# == ....
-# DENTRO DE LA SELECTIVA CAPTURAR LOS DATOS DEL FORMULARIO : USERNAMEUSUARIO =
-# REQUEST.POST.GET('USE ...
+# CREAR EL IF QUE PERMITA RECONOCER EL MÉTODO DE LA PETICION: IF REQUEST.METHOD == ....
+# DENTRO DE LA SELECTIVA CAPTURAR LOS DATOS DEL FORMULARIO : USERNAMEUSUARIO = REQUEST.POST.GET('USE ...
 
-@login_required(login_url='/')
+
 def consolaAdministrador(request):
     allUsers = User.objects.all().order_by('id')
     if request.method == 'POST': #peticion POST:envio de datos
-        usernameUsuario = request.POST.get('usernameUsario')
+        usernameUsuario = request.POST.get('usernameUsuario')
         contraUsuario = request.POST.get('contraUsuario')
         nombreUsuario = request.POST.get('nombreUsuario')
         apellidoUsuario = request.POST.get('apellidoUsuario')
@@ -144,6 +145,7 @@ def consolaAdministrador(request):
         profesionUsuario = request.POST.get('profesionUsuario')
         nroCelular = request.POST.get('nroCelular')
         perfilUsuario = request.POST.get('perfilUsuario')
+        usrRel = request.user
         #CREAR EL OBJETO USER CON USERNAME E EMAIL:
         #OBJUSR = USER.OBJECTS.CREATE(
         #USERNAME = ... 
@@ -154,7 +156,6 @@ def consolaAdministrador(request):
             email=emailUsuario
             )
         #LUEGO SETEAR LA CONTRASEÑA CON LA FUNCION SET_PASSWORD:
-        #CONTRAUSUARIO = REQUEST.POST.GET('CONTRAUSUARIO')
         #OBJUSR.SET_PASSWORD(CONTRAUSUARIO) ...
         Objusr.set_password(contraUsuario)
         Objusr.first_name = nombreUsuario
@@ -206,30 +207,24 @@ datosUsuario.objects.create(
 )
 """
 
-
+#Pregunta 3
+    #Esta funcion devolvera los campos que se necesitan cargar en la ventana modal para poder ser editados
+    #Con el id del usuario se puede obtener el objeto y devolver el objeto Json con la informacion necesaria.
 def obtenerDatosUsuario(request):
-    idUsuario = request.GET.get('idUsuario')
-    """
-    Pregunta 3
-    Esta funcion devolvera los campos que se necesitan 
-    cargar en la ventana modal para poder ser editados
-    Con el id del usuario se puede obtener el objeto y devolver
-    el objeto Json con la informacion necesaria.
-    """ 
+    idUsuario= request.GET.get('idUsuario')
+    
     try:
-        datosUser = []  #datosComentarios = []
-        objUsr = User.objects.get(id=idUsuario)
-        datosExten=objUser.datosUsuario.set.all()
-        return JsonResponse({
+         objUsr = datosUsuario.objects.get(id=idUsuario)
+
+         return JsonResponse({
             #'llave':valor de la llave
-            'usuario': objUsr.username,
-            'email':objUsr.email,
-            'nombre':objUsr.first_name,
-            'apellido': objUsr.last_name,
-           # 'profesion':f"{objUser.usrRel.profesion}"
-            'profesion':datdatosExten.profesion,
-            'numero':datdatosExten.nroCelular,
-            'perfil':datdatosExten.perfilUsuario
+            'usuario':f"{objUsr.usrRel.username}",
+            'nombre':f"{objUsr.usrRel.first_name}",
+            'apellido':f"{ objUsr.usrRel.last_name}",
+            'email':f"{objUsr.usrRel.email}",
+            'profesion':objUsr.profesion,
+            'numero':objUsr.nroCelular,
+            'perfil':objUsr.perfilUsuario
         })
     except:
         return JsonResponse({
@@ -237,14 +232,10 @@ def obtenerDatosUsuario(request):
             'email':'SIN DATOS',
             'nombre':'SIN DATOS',
             'apellido':'SIN DATOS',
-            'profesion':None,
-            'numero':None,
-            'perfil':None
+            'profesion':'SIN DATOS',
+            'numero':'SIN DATOS',
+            'perfil':'SIN DATOS'
         })
-
-    return JsonResponse({
-        'resp':'200'
-    })
 
 def actualizarUsuario(request):
     """
@@ -255,6 +246,27 @@ def actualizarUsuario(request):
     de la base de datos. Con el objeto capturado modificar los campos respectivos y finalmente
     ejecutar el metodo save() para su respectiva actualizacion
     """
+    idUsuario= request.GET.get('idUsuario')
 
+    if request.method == 'POST':
+        nombreUsuario= request.POST.get('nombreUsuario')
+        apellidoUsuario = request.POST.get('apellidoUsuario')
+        profesionUsuario = request.POST.get('profesionUsuario')
+        nroCelular = request.POST.get('nroCelular')
+        perfilUsuario = request.POST.get('perfilUsuario')
+         
+        nuevaUser=User.objects.get(id=idUsuario)
+        nuevaUser.first_name = nombreUsuario
+        nuevaUser.last_name = apellidoUsuario
+        nuevaUser.save()
+
+        nuevaAct=datosUsuario.objects.get(id=idUsuario)
+        nuevaAct.profesion = profesionUsuario
+        nuevaAct.nroCelular = nroCelular
+        nuevaAct.perfilUsuario=perfilUsuario
+        nuevaAct.usrRel=nuevaUser
+        nuevaAct.save()
+           
     return HttpResponseRedirect(reverse('app3:consolaAdministrador'))
+    
 

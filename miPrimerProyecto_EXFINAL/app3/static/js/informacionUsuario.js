@@ -96,22 +96,23 @@ function getCookie(name)
     return cookieValue;
 }
 
-function cargarInformacionUsuario(idUsuario)
+function cargarInformacionUsuario(idUsuario) /*id que llega desde la vista */
 /*PREGUNTA 4
     DESARROLLAR LA FUNCION DE JAVASCRIPT QUE PERMITA CONSULTAR LA RUTA
-    OBTENERDATOSUSUARIO?IDUSUARIO=${IDUSUARIO}
- */ {
-    fetch(`/obtenerDatosUsuario?idUsusario=${idUsuario}`)
+    OBTENERDATOSUSUARIO?IDUSUARIO=${IDUSUARIO}*/
+{
+    fetch(`/obtenerDatosUsuario?idUsuario=${idUsuario}`)
         .then(response => response.json())
         .then(data => {
-            usernameUsuario = document.getElementById('usernameUsario')
-            contraUsuario = document.getElementById('contraUsuario')
+            usernameUsuario = document.getElementById('usernameUsuario')
             nombreUsuario = document.getElementById('nombreUsuario')
             apellidoUsuario = document.getElementById('apellidoUsuario')
             emailUsuario = document.getElementById('emailUsuario')
             profesionUsuario = document.getElementById('profesionUsuario')
             nroCelular = document.getElementById('nroCelular')
             perfilUsuario = document.getElementById('perfilUsuario')
+            console.log(data)
+            idUsr = document.getElementById('idUsr')
             /*
             REVISAR LA IMPLEMENTACION REALIZADA PARA EDITAR MOSTRAR PUBLICACIONES
         
@@ -119,16 +120,25 @@ function cargarInformacionUsuario(idUsuario)
             PARA PODER ENVIARLO AL SERVIDOR COMO PARTE DE LOS DATOS Y ASI PODER
             RECUPERAR EL OBJETO USUARIO Y ACTUALIZAR LOS DATOS
             */
-            usernameUsuario = data.username
-            contraUsuario = data.password
-            nombreUsuario = data.first_name
-            apellidoUsuario = data.last_name
+            usernameUsuario.value = ''
+            nombreUsuario.value = ''
+            apellidoUsuario.value = ''
+            emailUsuario.value = ''
+            profesionUsuario.value = ''
+            nroCelular.value = ''
+            perfilUsuario.value = ''
+            idUsr.innerHTML = ''
+           
+            /*id de input=data.valor en views*/
+            usernameUsuario = data.usuario
+            nombreUsuario = data.nombre
+            apellidoUsuario = data.apellido
             emailUsuario = data.email
             profesionUsuario = data.profesion
-            nroCelular = data.nroCelular
-            perfilUsuario = data.perfilUsuario
-
-            idUsuario.innerHTML = String(idUsuario)
-
+            nroCelular = data.numero
+            perfilUsuario = data.perfil
+            idUsr.innerHTML = String(idUsuario)
+            
+            
         })
 }

@@ -126,6 +126,8 @@
                                 <td>{{ pubInfo.autorPub.first_name }} {{ pubInfo.autorPub.last_name }}</td>
                                 <td>{{ pubInfo.titulo }}</td>
                                 <td><button data-bs-toggle="modal" data-bs-target="#detallePub" id="{{ pubInfo.id }}" onclick="cargarPub(this.id)" class="btn btn-info"><i class="fa-solid fa-eye"></i></button></td>
+                               <!-- data-bs-target=id de la ventana modal: corresponde con la division que contiene la ventana modal-->
+                                <!--onclick=nombre de funcion js-->
                                 <td><a class="btn btn-danger" href="#"><i class="fa-solid fa-trash"></i></a></td>
                             </tr>
                             {% endfor %}
